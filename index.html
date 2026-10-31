@@ -1,258 +1,183 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#fff8e8">
-  <title>Kartu Hijaiyah Ceria</title>
-  <style>
-    :root {
-      --ink: #26334a;
-      --muted: #718096;
-      --paper: #fffdf7;
-      --purple: #8067d8;
-      --pink: #ff8fa3;
-      --yellow: #ffd66b;
-      --mint: #75d9bd;
-      --blue: #83c9f4;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      color: var(--ink);
-      font-family: "Trebuchet MS", "Arial Rounded MT Bold", Arial, sans-serif;
-      background:
-        radial-gradient(circle at 8% 12%, #ffe7a6 0 5px, transparent 6px),
-        radial-gradient(circle at 92% 18%, #ffc9d4 0 7px, transparent 8px),
-        radial-gradient(circle at 15% 85%, #bcefe0 0 6px, transparent 7px),
-        linear-gradient(135deg, #fff8e8, #f4f0ff 55%, #eaf8ff);
-      background-size: 120px 120px, 150px 150px, 170px 170px, auto;
-    }
-    .page { width: min(900px, 100%); margin: auto; padding: 28px 18px 40px; }
-    header { text-align: center; margin-bottom: 22px; }
-    .sparkle { font-size: 25px; letter-spacing: 12px; margin-bottom: 5px; }
-    h1 { margin: 0; font-size: clamp(28px, 5vw, 42px); color: #5d4ab0; }
-    .subtitle { color: var(--muted); margin: 9px 0 0; font-size: 15px; }
-    .topline {
-      display: flex; justify-content: space-between; align-items: center;
-      gap: 12px; flex-wrap: wrap; margin: 20px 0 12px;
-    }
-    .counter { font-weight: 800; color: #6554b5; }
-    .progress { height: 10px; background: #e7e3f5; border-radius: 99px; overflow: hidden; flex: 1; min-width: 120px; }
-    .progress > div { height: 100%; width: 0; background: linear-gradient(90deg, #8e79e6, #ff9eb0); border-radius: inherit; transition: width .25s; }
-    .card-wrap { perspective: 1000px; max-width: 520px; margin: 18px auto; }
-    .flashcard {
-      width: 100%; min-height: 350px; border: 0; border-radius: 30px;
-      background: var(--card-color, #ffd66b); color: var(--ink);
-      box-shadow: 0 14px 0 rgba(65, 57, 105, .10), 0 22px 38px rgba(69, 61, 113, .13);
-      cursor: pointer; position: relative; padding: 24px;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      transition: transform .18s, background .2s; overflow: hidden;
-    }
-    .flashcard:hover { transform: translateY(-3px) rotate(-.3deg); }
-    .flashcard:active { transform: scale(.985); }
-    .flashcard::before, .flashcard::after {
-      content: ""; position: absolute; border: 3px solid rgba(255,255,255,.45);
-      border-radius: 50%; width: 100px; height: 100px;
-    }
-    .flashcard::before { top: -45px; left: -35px; }
-    .flashcard::after { bottom: -55px; right: -25px; width: 140px; height: 140px; }
-    .card-label { font-size: 13px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; opacity: .72; }
-    .arabic {
-      font-family: "Noto Naskh Arabic", "Amiri", "Traditional Arabic", serif;
-      font-size: clamp(125px, 27vw, 190px); line-height: 1.45; direction: rtl;
-      text-shadow: 0 4px 0 rgba(255,255,255,.25);
-    }
-    .letter-name { font-size: clamp(26px, 6vw, 36px); font-weight: 900; margin-top: 2px; }
-    .hint { margin-top: 13px; font-size: 14px; opacity: .75; }
-    .answer { display: none; text-align: center; }
-    .flashcard.revealed .answer { display: block; }
-    .flashcard.revealed .tap-hint { display: none; }
-    .flashcard.revealed .arabic { font-size: clamp(100px, 22vw, 145px); }
-    .latin { font-size: 20px; font-weight: 800; margin-top: 5px; }
-    .example { font-size: 15px; margin-top: 10px; opacity: .8; }
-    .controls { display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap; margin: 20px 0; }
-    button.control {
-      border: 0; border-radius: 16px; padding: 13px 19px; font-size: 15px;
-      font-weight: 800; color: #fff; cursor: pointer; box-shadow: 0 5px 0 rgba(45,45,70,.12);
-      transition: transform .15s, filter .15s;
-    }
-    button.control:hover { filter: brightness(1.04); transform: translateY(-2px); }
-    button.control:active { transform: translateY(2px); box-shadow: none; }
-    .prev { background: #8a79dc; } .next { background: #ff8fa3; }
-    .sound { background: #42b99b; } .shuffle { background: #efa93d; }
-    .small-note { text-align: center; color: var(--muted); font-size: 13px; margin-top: 8px; }
-    .jump-area { margin: 28px auto 0; max-width: 680px; text-align: center; }
-    .jump-area h2 { font-size: 17px; color: #6554b5; margin-bottom: 12px; }
-    .letter-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
-    .letter-chip {
-      width: 42px; height: 42px; border: 2px solid transparent; border-radius: 13px;
-      background: rgba(255,255,255,.8); color: #5c4ba8; font-size: 24px; cursor: pointer;
-      font-family: "Noto Naskh Arabic", "Amiri", serif; box-shadow: 0 3px 0 rgba(80,70,120,.08);
-    }
-    .letter-chip.active { border-color: #8067d8; background: #e8e1ff; }
-    footer { text-align: center; color: #8a8da0; font-size: 12px; margin-top: 30px; }
-    button:focus-visible { outline: 3px solid #26334a; outline-offset: 3px; }
-    @media (max-width: 480px) {
-      .page { padding: 22px 14px 30px; }
-      .flashcard { min-height: 310px; border-radius: 25px; }
-      button.control { padding: 12px 15px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kartu Hijaiyah</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=Noto+Naskh+Arabic:wght@500;700&display=swap">
+<style>
+:root{
+  --bg:#f7f7f4; --surface:#ffffff; --ink:#1d2421; --muted:#68726d; --line:#e2e4df; --accent:#1f6f5c; --accent-ink:#ffffff;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#141816;--surface:#1c211f;--ink:#eceeea;--muted:#9aa49e;--line:#2c3330;--accent:#5fc2a6;--accent-ink:#0f1512}
+}
+:root[data-theme="dark"]{--bg:#141816;--surface:#1c211f;--ink:#eceeea;--muted:#9aa49e;--line:#2c3330;--accent:#5fc2a6;--accent-ink:#0f1512}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Figtree",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:1.5}
+.page{max-width:560px;margin:0 auto;padding:28px 20px 48px}
+.view{display:none}.view.on{display:block}
+h1{font-size:clamp(28px,6vw,34px);margin:8px 0 6px;letter-spacing:-.01em}
+.lead{color:var(--muted);margin:0 0 28px}
+.menu{display:grid;gap:12px}
+.menu button{all:unset;box-sizing:border-box;cursor:pointer;display:block;width:100%;padding:20px;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.menu button:hover{border-color:var(--accent)}
+.menu strong{display:block;font-size:18px}
+.menu span{color:var(--muted);font-size:14px}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.back{all:unset;cursor:pointer;color:var(--muted);font-weight:600;padding:6px 0}
+.back:hover{color:var(--ink)}
+.title{font-weight:700}
+.card{width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;padding:24px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:16px;font:inherit}
+button.card{cursor:pointer}
+.arabic{font-family:"Noto Naskh Arabic","Amiri","Traditional Arabic",serif;font-size:clamp(120px,30vw,170px);line-height:1.5;direction:rtl}
+.name{font-size:28px;font-weight:700;margin-top:4px}
+.latin{font-size:18px;color:var(--muted);margin-top:2px}
+.tap{color:var(--muted);font-size:14px;margin-top:10px}
+.reveal{display:none;text-align:center}
+.card.open .reveal{display:block}.card.open .tap{display:none}
+.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.btn{all:unset;box-sizing:border-box;cursor:pointer;padding:12px 20px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-weight:600;text-align:center}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.count{text-align:center;color:var(--muted);font-size:14px;margin-top:12px}
+.grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:28px}
+.chip{all:unset;box-sizing:border-box;cursor:pointer;width:44px;height:44px;display:grid;place-items:center;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-family:"Noto Naskh Arabic",serif;font-size:24px}
+.chip:hover{border-color:var(--accent)}
+.chip.on{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
+.setting{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.setting label{color:var(--muted);font-size:14px;white-space:nowrap}
+select{flex:1;min-width:0;padding:11px 12px;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+</style>
 </head>
 <body>
-  <main class="page">
-    <header>
-      <div class="sparkle">✦ ✿ ✦</div>
-      <h1>Kartu Hijaiyah Ceria</h1>
-      <p class="subtitle">Belajar mengenal huruf hijaiyah sambil bermain!</p>
-    </header>
+<main class="page">
 
-    <section aria-label="Kartu belajar">
-      <div class="topline">
-        <span class="counter" id="counter">Huruf 1 dari 29</span>
-        <div class="progress" aria-label="Progres belajar"><div id="progressBar"></div></div>
-      </div>
+<section class="view" id="v-home">
+  <h1>Kartu Hijaiyah</h1>
+  <p class="lead">Pilih cara belajar.</p>
+  <div class="menu">
+    <button type="button" data-go="pengenalan"><strong>Pengenalan</strong><span>Kenali huruf hijaiyah beserta nama dan transliterasinya.</span></button>
+    <button type="button" data-go="flashcard"><strong>Flashcard hafalan</strong><span>Uji hafalan huruf secara acak, dengan batas huruf yang bisa diatur.</span></button>
+  </div>
+</section>
 
-      <div class="card-wrap">
-        <button class="flashcard" id="flashcard" type="button" aria-label="Ketuk kartu untuk melihat nama huruf">
-          <span class="card-label" id="cardLabel">Kenali huruf ini</span>
-          <span class="arabic" id="arabic" lang="ar">ا</span>
-          <span class="tap-hint hint" id="tapHint">Ketuk kartu untuk membuka ✨</span>
-          <span class="answer" id="answer">
-            <span class="letter-name" id="letterName">Alif</span>
-            <span class="latin" id="latin">A</span>
-            <span class="example" id="example">Seperti bunyi awal “ayam”</span>
-          </span>
-        </button>
-      </div>
+<section class="view" id="v-pengenalan">
+  <div class="top"><button class="back" type="button" data-go="home">← Beranda</button><span class="title">Pengenalan</span><span style="width:70px"></span></div>
+  <div class="card" aria-live="polite">
+    <span class="arabic" id="pArabic" lang="ar"></span>
+    <span class="name" id="pName"></span>
+    <span class="latin" id="pLatin"></span>
+  </div>
+  <div class="row">
+    <button class="btn" id="pPrev" type="button">Sebelumnya</button>
+    <button class="btn" id="pSound" type="button">Dengarkan</button>
+    <button class="btn primary" id="pNext" type="button">Berikutnya</button>
+  </div>
+  <p class="count" id="pCount"></p>
+  <div class="grid" id="pGrid"></div>
+</section>
 
-      <div class="controls">
-        <button class="control prev" id="prevBtn" type="button">← Sebelumnya</button>
-        <button class="control sound" id="soundBtn" type="button">🔊 Dengarkan</button>
-        <button class="control next" id="nextBtn" type="button">Berikutnya →</button>
-      </div>
-      <div class="controls" style="margin-top:0">
-        <button class="control shuffle" id="shuffleBtn" type="button">🔀 Acak huruf</button>
-      </div>
-      <p class="small-note">Ketuk kartu untuk melihat nama dan petunjuk bunyinya.</p>
-    </section>
+<section class="view" id="v-flashcard">
+  <div class="top"><button class="back" type="button" data-go="home">← Beranda</button><span class="title">Flashcard hafalan</span><span style="width:70px"></span></div>
+  <div class="setting">
+    <label for="limit">Hafalan sampai huruf</label>
+    <select id="limit"></select>
+  </div>
+  <button class="card" id="fCard" type="button" aria-label="Ketuk kartu untuk melihat jawaban">
+    <span class="arabic" id="fArabic" lang="ar"></span>
+    <span class="tap">Ketuk kartu untuk melihat jawaban</span>
+    <span class="reveal"><span class="name" id="fName" style="display:block"></span><span class="latin" id="fLatin" style="display:block"></span></span>
+  </button>
+  <div class="row"><button class="btn primary" id="fShuffle" type="button">Acak</button></div>
+</section>
 
-    <section class="jump-area">
-      <h2>Pilih huruf yang ingin dipelajari</h2>
-      <div class="letter-grid" id="letterGrid"></div>
-    </section>
-    <footer>Belajar sedikit demi sedikit. Semangat! 🌈</footer>
-  </main>
+</main>
 
-  <script>
-    // Data huruf hijaiyah. Ejaan latin dan petunjuk bunyi disederhanakan untuk anak.
-    const letters = [
-      {char:"ا", name:"Alif", latin:"A", hint:"Bentuk tegak seperti garis."},
-      {char:"ب", name:"Ba", latin:"Ba", hint:"Memiliki satu titik di bawah."},
-      {char:"ت", name:"Ta", latin:"Ta", hint:"Memiliki dua titik di atas."},
-      {char:"ث", name:"Tsa", latin:"Tsa", hint:"Memiliki tiga titik di atas."},
-      {char:"ج", name:"Jim", latin:"Ja / Ji / Ju", hint:"Memiliki satu titik di bawah."},
-      {char:"ح", name:"Ha", latin:"Ha", hint:"Bentuknya seperti Jim tanpa titik."},
-      {char:"خ", name:"Kha", latin:"Kha", hint:"Memiliki satu titik di atas."},
-      {char:"د", name:"Dal", latin:"Da", hint:"Bentuknya melengkung."},
-      {char:"ذ", name:"Dzal", latin:"Dza", hint:"Dal dengan satu titik di atas."},
-      {char:"ر", name:"Ra", latin:"Ra", hint:"Bentuknya melengkung ke bawah."},
-      {char:"ز", name:"Zai", latin:"Za", hint:"Ra dengan satu titik di atas."},
-      {char:"س", name:"Sin", latin:"Sa", hint:"Memiliki tiga lekukan."},
-      {char:"ش", name:"Syin", latin:"Sya", hint:"Sin dengan tiga titik di atas."},
-      {char:"ص", name:"Shad", latin:"Sha", hint:"Bentuknya lebar dan tebal."},
-      {char:"ض", name:"Dhad", latin:"Dha", hint:"Shad dengan satu titik di atas."},
-      {char:"ط", name:"Tha", latin:"Tha", hint:"Memiliki bentuk tegak."},
-      {char:"ظ", name:"Zha", latin:"Zha", hint:"Tha dengan satu titik di atas."},
-      {char:"ع", name:"'Ain", latin:"‘A", hint:"Bentuknya seperti lengkungan."},
-      {char:"غ", name:"Ghain", latin:"Gha", hint:"'Ain dengan satu titik di atas."},
-      {char:"ف", name:"Fa", latin:"Fa", hint:"Memiliki satu titik di atas."},
-      {char:"ق", name:"Qaf", latin:"Qa", hint:"Memiliki dua titik di atas."},
-      {char:"ك", name:"Kaf", latin:"Ka", hint:"Memiliki bentuk seperti kait."},
-      {char:"ل", name:"Lam", latin:"La", hint:"Bentuknya tinggi dan tegak."},
-      {char:"م", name:"Mim", latin:"Ma", hint:"Bentuknya membulat."},
-      {char:"ن", name:"Nun", latin:"Na", hint:"Memiliki satu titik di atas."},
-      {char:"و", name:"Wau", latin:"Wa / U", hint:"Bentuknya seperti koma."},
-      {char:"ه", name:"Ha", latin:"Ha", hint:"Bentuknya membulat."},
-      {char:"ء", name:"Hamzah", latin:"'", hint:"Tanda hamzah."},
-      {char:"ي", name:"Ya", latin:"Ya", hint:"Memiliki dua titik di bawah."}
-    ];
+<script>
+const letters = [
+  {c:"ا",n:"Alif",l:"A"},{c:"ب",n:"Ba",l:"Ba"},{c:"ت",n:"Ta",l:"Ta"},{c:"ث",n:"Tsa",l:"Tsa"},
+  {c:"ج",n:"Jim",l:"Ja"},{c:"ح",n:"Ha",l:"Ha"},{c:"خ",n:"Kha",l:"Kha"},{c:"د",n:"Dal",l:"Da"},
+  {c:"ذ",n:"Dzal",l:"Dza"},{c:"ر",n:"Ra",l:"Ra"},{c:"ز",n:"Zai",l:"Za"},{c:"س",n:"Sin",l:"Sa"},
+  {c:"ش",n:"Syin",l:"Sya"},{c:"ص",n:"Shad",l:"Sha"},{c:"ض",n:"Dhad",l:"Dha"},{c:"ط",n:"Tha",l:"Tha"},
+  {c:"ظ",n:"Zha",l:"Zha"},{c:"ع",n:"’Ain",l:"’A"},{c:"غ",n:"Ghain",l:"Gha"},{c:"ف",n:"Fa",l:"Fa"},
+  {c:"ق",n:"Qaf",l:"Qa"},{c:"ك",n:"Kaf",l:"Ka"},{c:"ل",n:"Lam",l:"La"},{c:"م",n:"Mim",l:"Ma"},
+  {c:"ن",n:"Nun",l:"Na"},{c:"و",n:"Wau",l:"Wa"},{c:"ه",n:"Ha",l:"Ha"},{c:"ء",n:"Hamzah",l:"’"},
+  {c:"ي",n:"Ya",l:"Ya"}
+];
+const $ = id => document.getElementById(id);
+const views = ["home","pengenalan","flashcard"];
 
-    const colors = ["#ffe08a","#ffc4d0","#aee9d7","#b9ddff","#d7c8ff","#ffd2a8"];
-    let current = 0;
-    let revealed = false;
+function show(name){
+  if(!views.includes(name)) name = "home";
+  views.forEach(v => $("v-"+v).classList.toggle("on", v===name));
+  window.scrollTo(0,0);
+}
+function go(name){ location.hash = name === "home" ? "" : name; }
+window.addEventListener("hashchange", () => show(location.hash.slice(1)));
+document.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => go(b.dataset.go)));
 
-    const $ = id => document.getElementById(id);
-    const card = $("flashcard");
+/* Pengenalan */
+let p = 0;
+function renderP(){
+  const t = letters[p];
+  $("pArabic").textContent = t.c; $("pName").textContent = t.n; $("pLatin").textContent = t.l;
+  $("pCount").textContent = `Huruf ${p+1} dari ${letters.length}`;
+  document.querySelectorAll("#pGrid .chip").forEach((el,i) => el.classList.toggle("on", i===p));
+}
+function setP(i){ p = (i + letters.length) % letters.length; renderP(); }
+letters.forEach((t,i) => {
+  const b = document.createElement("button");
+  b.className = "chip"; b.type = "button"; b.textContent = t.c; b.lang = "ar";
+  b.setAttribute("aria-label", "Huruf " + t.n);
+  b.addEventListener("click", () => setP(i));
+  $("pGrid").appendChild(b);
+});
+$("pPrev").addEventListener("click", () => setP(p-1));
+$("pNext").addEventListener("click", () => setP(p+1));
+$("pSound").addEventListener("click", () => {
+  if(!("speechSynthesis" in window)){ alert("Browser ini belum mendukung suara."); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(letters[p].n);
+  u.lang = "ar-SA"; u.rate = .75;
+  speechSynthesis.speak(u);
+});
 
-    function render() {
-      const item = letters[current];
-      $("arabic").textContent = item.char;
-      $("letterName").textContent = item.name;
-      $("latin").textContent = item.latin;
-      $("example").textContent = item.hint;
-      $("counter").textContent = `Huruf ${current + 1} dari ${letters.length}`;
-      $("progressBar").style.width = `${((current + 1) / letters.length) * 100}%`;
-      $("cardLabel").textContent = revealed ? "Nama huruf" : "Kenali huruf ini";
-      card.style.setProperty("--card-color", colors[current % colors.length]);
-      card.classList.toggle("revealed", revealed);
-      $("tapHint").textContent = "Ketuk kartu untuk membuka ✨";
-      document.querySelectorAll(".letter-chip").forEach((chip, i) => {
-        chip.classList.toggle("active", i === current);
-        chip.setAttribute("aria-current", i === current ? "true" : "false");
-      });
-    }
+/* Flashcard */
+let f = 0, limit = letters.length;
+try { const s = parseInt(localStorage.getItem("hijaiyah-limit"),10); if(s>=1 && s<=letters.length) limit = s; } catch(e){}
+letters.forEach((t,i) => {
+  const o = document.createElement("option");
+  o.value = i+1; o.textContent = `${i+1}. ${t.n} (${t.c})`;
+  $("limit").appendChild(o);
+});
+$("limit").value = limit;
 
-    function goTo(index) {
-      current = (index + letters.length) % letters.length;
-      revealed = false;
-      render();
-    }
+function renderF(){
+  const t = letters[f];
+  $("fArabic").textContent = t.c; $("fName").textContent = t.n; $("fLatin").textContent = t.l;
+  $("fCard").classList.remove("open");
+}
+function shuffleF(){
+  let n = f;
+  if(limit > 1) while(n === f) n = Math.floor(Math.random()*limit);
+  else n = 0;
+  f = n; renderF();
+}
+$("fCard").addEventListener("click", () => $("fCard").classList.toggle("open"));
+$("fShuffle").addEventListener("click", shuffleF);
+$("limit").addEventListener("change", e => {
+  limit = parseInt(e.target.value,10);
+  try { localStorage.setItem("hijaiyah-limit", String(limit)); } catch(err){}
+  f = -1; shuffleF();
+});
 
-    function buildGrid() {
-      const grid = $("letterGrid");
-      letters.forEach((item, index) => {
-        const button = document.createElement("button");
-        button.className = "letter-chip";
-        button.type = "button";
-        button.textContent = item.char;
-        button.lang = "ar";
-        button.setAttribute("aria-label", `Pelajari huruf ${item.name}`);
-        button.addEventListener("click", () => goTo(index));
-        grid.appendChild(button);
-      });
-    }
-
-    card.addEventListener("click", () => {
-      revealed = !revealed;
-      render();
-    });
-    $("prevBtn").addEventListener("click", () => goTo(current - 1));
-    $("nextBtn").addEventListener("click", () => goTo(current + 1));
-    $("shuffleBtn").addEventListener("click", () => {
-      let next = current;
-      while (next === current && letters.length > 1) next = Math.floor(Math.random() * letters.length);
-      goTo(next);
-    });
-
-    $("soundBtn").addEventListener("click", () => {
-      const item = letters[current];
-      if (!("speechSynthesis" in window)) {
-        alert("Fitur suara belum didukung oleh browser ini.");
-        return;
-      }
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(item.name);
-      utterance.lang = "ar-SA";
-      utterance.rate = 0.75;
-      utterance.pitch = 1.05;
-      window.speechSynthesis.speak(utterance);
-    });
-
-    buildGrid();
-    render();
-  </script>
+renderP();
+f = Math.floor(Math.random()*limit); renderF();
+show(location.hash.slice(1));
+</script>
 </body>
 </html>
