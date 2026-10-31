@@ -101,13 +101,66 @@ button.card{cursor:pointer}
 .box.sel{background:var(--purple);color:#fff}
 .box.sel .no{color:rgba(255,255,255,.85)}
 /* bottom nav */
-.nav{position:sticky;bottom:10px;z-index:5;display:flex;gap:6px;margin-top:22px;padding:6px;border-radius:24px;background:var(--sheet);box-shadow:0 6px 22px rgba(34,45,70,.18);border:1px solid var(--line)}
+.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom,0px));width:min(492px,calc(100vw - 24px));z-index:20;display:flex;gap:6px;padding:6px;border-radius:24px;background:var(--sheet);box-shadow:0 6px 22px rgba(34,45,70,.18);border:1px solid var(--line)}
 .nav button{all:unset;box-sizing:border-box;cursor:pointer;flex:1;height:50px;border-radius:18px;display:grid;place-items:center;color:var(--muted)}
 .nav button.on{background:var(--tint);color:var(--tintink)}
 :focus-visible{outline:3px solid var(--purple);outline-offset:3px}
 @media (min-width:700px){.wrap{align-items:center}.sheet{padding:28px 28px 18px}}
 @media (max-width:380px){.sheet{padding:16px 14px 12px;border-radius:28px}.ib{width:54px;height:54px}.ib.hot{width:62px;height:62px}.bar{gap:12px}.feat{min-height:160px;padding:15px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:480px){
+.wrap{padding:8px 8px 16px}
+.sheet{padding:14px 12px 10px;border-radius:26px}
+svg.i{width:20px;height:20px}
+.head{gap:8px;margin-bottom:12px}
+.head h1,.head h2{font-size:16px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.head p{display:none}
+.round{width:38px;height:38px}
+.pill{font-size:12px;padding:5px 9px}
+.logo{width:38px;height:38px;border-radius:13px;font-size:24px}
+.hello{font-size:12px}
+.hero{padding:14px 16px;border-radius:24px}
+.hero strong{font-size:21px}
+.hero .lt{font-size:14px}
+.hero .cta{margin-top:10px;padding:7px 12px;font-size:13px}
+.harab{font-size:88px}
+h3{font-size:14px;margin:16px 0 10px}
+.feats{gap:8px}
+.feat{min-height:130px;padding:13px;border-radius:20px}
+.feat .ic{width:38px;height:38px;border-radius:13px}
+.feat strong{font-size:15px;margin-top:10px}
+.feat span.d{font-size:12px}
+.stats{gap:8px;margin-top:8px}
+.stat{padding:11px 13px;border-radius:18px}
+.stat b{font-size:16px}
+.stage{padding:10px;border-radius:22px}
+.card{min-height:clamp(210px,34dvh,320px);padding:16px;border-radius:24px}
+.arabic{font-size:clamp(84px,26vw,130px)}
+.name{font-size:24px}
+.latin{font-size:16px}
+.tap{font-size:12px}
+.tap svg{width:16px;height:16px}
+.bar{gap:12px;margin-top:14px}
+.ib{width:50px;height:50px;border-radius:16px}
+.ib svg{width:22px;height:22px}
+.ib.hot{width:56px;height:56px;border-radius:18px}
+.ib.hot svg{width:24px;height:24px}
+.wide{height:50px;font-size:16px;padding:0 28px;border-radius:18px}
+.grid{gap:6px;margin-top:14px;grid-template-columns:repeat(auto-fill,minmax(38px,1fr))}
+.chip{height:40px;font-size:22px;border-radius:12px}
+.setting{padding:8px;border-radius:18px;margin-bottom:10px}
+.limit-btn .ic{width:34px;height:34px;border-radius:12px}
+.limit-btn strong{font-size:15px}
+.limit-btn .arv{font-size:21px}
+.limit-btn small{font-size:11px}
+.picker{grid-template-columns:repeat(auto-fill,minmax(42px,1fr));gap:5px}
+.box{height:50px;border-radius:11px}
+.box .ar{font-size:21px}
+.box .no{font-size:10px}
+.nav{padding:4px;border-radius:20px;bottom:calc(6px + env(safe-area-inset-bottom,0px))}
+.nav button{height:42px;border-radius:15px}
+}
+.sheet{padding-bottom:calc(88px + env(safe-area-inset-bottom,0px))}
 </style>
 </head>
 <body>
@@ -149,11 +202,11 @@ button.card{cursor:pointer}
   <div class="feats">
     <button class="feat g" type="button" data-go="pengenalan">
       <span class="ic"><svg class="i"><use href="#i-book"/></svg></span>
-      <strong>Pengenalan</strong><span class="d">Nama dan transliterasi huruf</span>
+      <strong>Pengenalan Huruf</strong><span class="d">Nama dan transliterasi huruf</span>
     </button>
     <button class="feat o" type="button" data-go="flashcard">
       <span class="ic"><svg class="i"><use href="#i-cards"/></svg></span>
-      <strong>Flashcard hafalan</strong><span class="d">Uji hafalan secara acak</span>
+      <strong>Kartu Hafalan</strong><span class="d">Uji hafalan secara acak</span>
     </button>
   </div>
   <div class="stats">
@@ -165,7 +218,7 @@ button.card{cursor:pointer}
 <section class="view" id="v-pengenalan">
   <div class="head">
     <button class="round" type="button" data-go="home" aria-label="Kembali ke beranda"><svg class="i"><use href="#i-left"/></svg></button>
-    <div class="t"><h2>Pengenalan</h2><p>Huruf hijaiyah</p></div>
+    <div class="t"><h2>Pengenalan Huruf</h2><p>Huruf hijaiyah</p></div>
     <span class="pill" id="pCount"></span>
     <button class="round theme" type="button" aria-label="Ganti tema terang atau gelap"><svg class="i moon"><use href="#i-moon"/></svg><svg class="i sun"><use href="#i-sun"/></svg></button>
   </div>
@@ -187,7 +240,7 @@ button.card{cursor:pointer}
 <section class="view" id="v-flashcard">
   <div class="head">
     <button class="round" type="button" data-go="home" aria-label="Kembali ke beranda"><svg class="i"><use href="#i-left"/></svg></button>
-    <div class="t"><h2>Flashcard hafalan</h2></div>
+    <div class="t"><h2>Kartu Hafalan</h2><p>Hafalan huruf</p></div>
     <button class="round theme" type="button" aria-label="Ganti tema terang atau gelap"><svg class="i moon"><use href="#i-moon"/></svg><svg class="i sun"><use href="#i-sun"/></svg></button>
   </div>
   <div class="setting">
@@ -201,6 +254,7 @@ button.card{cursor:pointer}
   <div class="stage">
     <button class="card" id="fCard" type="button" aria-label="Ketuk kartu untuk melihat jawaban">
       <span class="arabic" id="fArabic" lang="ar"></span>
+      
       <span class="reveal"><span class="name" id="fName" style="display:block"></span><span class="latin" id="fLatin" style="display:block"></span></span>
     </button>
   </div>
@@ -209,8 +263,8 @@ button.card{cursor:pointer}
 
 <nav class="nav" aria-label="Menu utama">
   <button type="button" data-go="home" aria-label="Beranda"><svg class="i"><use href="#i-home"/></svg></button>
-  <button type="button" data-go="pengenalan" aria-label="Pengenalan"><svg class="i"><use href="#i-book"/></svg></button>
-  <button type="button" data-go="flashcard" aria-label="Flashcard hafalan"><svg class="i"><use href="#i-cards"/></svg></button>
+  <button type="button" data-go="pengenalan" aria-label="Pengenalan Huruf"><svg class="i"><use href="#i-book"/></svg></button>
+  <button type="button" data-go="flashcard" aria-label="Kartu Hafalan"><svg class="i"><use href="#i-cards"/></svg></button>
 </nav>
 
 </main></div>
@@ -324,7 +378,26 @@ function shuffleF(){
   f = n; renderF();
 }
 $("fCard").addEventListener("click", () => $("fCard").classList.toggle("open"));
-$("fShuffle").addEventListener("click", shuffleF);
+let actx;
+function sfx(){
+  try{
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(!AC) return;
+    actx = actx || new AC();
+    if(actx.state === "suspended") actx.resume();
+    const t0 = actx.currentTime;
+    [523.25, 659.25, 880].forEach((fr,i) => {
+      const o = actx.createOscillator(), g = actx.createGain(), t = t0 + i*0.06;
+      o.type = "triangle"; o.frequency.value = fr;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.18, t+0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t+0.13);
+      o.connect(g); g.connect(actx.destination);
+      o.start(t); o.stop(t+0.15);
+    });
+  }catch(e){}
+}
+$("fShuffle").addEventListener("click", () => { sfx(); shuffleF(); });
 
 /* Beranda: huruf hari ini */
 const d = new Date();
