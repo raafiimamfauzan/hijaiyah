@@ -4,98 +4,216 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Kartu Hijaiyah</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=Noto+Naskh+Arabic:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&family=Amiri:wght@400;700&display=swap">
 <style>
 :root{
-  --bg:#f7f7f4; --surface:#ffffff; --ink:#1d2421; --muted:#68726d; --line:#e2e4df; --accent:#1f6f5c; --accent-ink:#ffffff;
+  --bg:#e7eeeb; --sheet:#ffffff; --panel:#f4f6f6; --ink:#1b1f3a; --muted:#8a92a0; --line:#e8ebed;
+  --purple:#4f3fd9; --tint:rgba(79,63,217,.12); --tintink:#4f3fd9; --green:#3dbf8a; --green-d:#2a9d72; --orange:#ff7a45; --orange-d:#ee6a33;
+  --shadow:0 10px 28px rgba(34,45,70,.12); --blob-g:#46c392; --blob-o:#ff7a45;
   box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
 @media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){--bg:#141816;--surface:#1c211f;--ink:#eceeea;--muted:#9aa49e;--line:#2c3330;--accent:#5fc2a6;--accent-ink:#0f1512}
+  :root:not([data-theme="light"]){--bg:#121715;--sheet:#1d2321;--panel:#262d2b;--ink:#eef1f0;--muted:#98a29d;--line:#313a37;--tint:rgba(150,135,255,.2);--tintink:#c0b8ff;--shadow:0 10px 28px rgba(0,0,0,.4);--blob-g:#1f6e53;--blob-o:#a14b2a}
 }
-:root[data-theme="dark"]{--bg:#141816;--surface:#1c211f;--ink:#eceeea;--muted:#9aa49e;--line:#2c3330;--accent:#5fc2a6;--accent-ink:#0f1512}
-*{box-sizing:border-box}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"Figtree",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:1.5}
-.page{max-width:560px;margin:0 auto;padding:28px 20px 48px}
+:root[data-theme="dark"]{--bg:#121715;--sheet:#1d2321;--panel:#262d2b;--ink:#eef1f0;--muted:#98a29d;--line:#313a37;--tint:rgba(150,135,255,.2);--tintink:#c0b8ff;--shadow:0 10px 28px rgba(0,0,0,.4);--blob-g:#1f6e53;--blob-o:#a14b2a}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:"Figtree",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:1.4;overflow-x:hidden}
+.blob{position:fixed;border-radius:50%;z-index:0;pointer-events:none}
+.blob.g{width:70vmin;height:70vmin;left:-28vmin;bottom:-22vmin;background:var(--blob-g)}
+.blob.o{width:52vmin;height:52vmin;right:-18vmin;top:-20vmin;background:var(--blob-o)}
+.wrap{position:relative;z-index:1;min-height:100dvh;display:flex;justify-content:center;align-items:flex-start;padding:16px 14px 28px}
+.sheet{width:100%;max-width:520px;background:var(--sheet);border-radius:34px;box-shadow:var(--shadow);padding:20px 18px 14px}
 .view{display:none}.view.on{display:block}
-h1{font-size:clamp(28px,6vw,34px);margin:8px 0 6px;letter-spacing:-.01em}
-.lead{color:var(--muted);margin:0 0 28px}
-.menu{display:grid;gap:12px}
-.menu button{all:unset;box-sizing:border-box;cursor:pointer;display:block;width:100%;padding:20px;background:var(--surface);border:1px solid var(--line);border-radius:12px}
-.menu button:hover{border-color:var(--accent)}
-.menu strong{display:block;font-size:18px}
-.menu span{color:var(--muted);font-size:14px}
-.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
-.back{all:unset;cursor:pointer;color:var(--muted);font-weight:600;padding:6px 0}
-.back:hover{color:var(--ink)}
-.title{font-weight:700}
-.card{width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;padding:24px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:16px;font:inherit}
+svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none;display:block}
+.head{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.head .t{flex:1;min-width:0}
+.head h1,.head h2{margin:0;font-size:19px;font-weight:800}
+.head p{margin:0;color:var(--muted);font-size:13px}
+.round{all:unset;box-sizing:border-box;cursor:pointer;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--sheet);box-shadow:var(--shadow);color:var(--ink);flex:none}
+.theme .sun{display:none}
+:root[data-eff="dark"] .theme .moon{display:none}
+:root[data-eff="dark"] .theme .sun{display:block}
+.pill{font-size:13px;font-weight:700;color:var(--tintink);background:var(--tint);padding:7px 12px;border-radius:99px;white-space:nowrap}
+/* home */
+.logo{width:46px;height:46px;border-radius:16px;background:var(--purple);color:#fff;display:grid;place-items:center;font-family:"Amiri",serif;font-size:30px;font-weight:700;line-height:1;flex:none;padding-bottom:4px}
+.hello{font-size:13px;color:var(--muted)}
+.hero{all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:20px 22px;border-radius:30px;background:var(--purple);color:#fff;box-shadow:0 14px 26px rgba(79,63,217,.28);overflow:hidden}
+.hero small{font-size:13px;opacity:.8}
+.hero strong{display:block;font-size:26px;font-weight:800;line-height:1.15;margin-top:4px}
+.hero .lt{display:block;opacity:.85;font-size:16px;margin-top:2px}
+.hero .cta{display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:9px 14px;border-radius:14px;background:rgba(255,255,255,.2);font-weight:700;font-size:14px}
+.hero .cta svg{width:18px;height:18px}
+.harab{font-family:"Amiri",serif;font-weight:700;font-size:clamp(100px,30vw,128px);line-height:1.4;direction:rtl}
+h3{font-size:16px;font-weight:800;margin:24px 0 12px}
+.feats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.feat{all:unset;box-sizing:border-box;cursor:pointer;min-height:176px;padding:18px;border-radius:26px;color:#fff;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.feat.g{background:var(--green-d)}.feat.o{background:var(--orange-d)}
+.feat .ic{width:48px;height:48px;border-radius:16px;background:rgba(255,255,255,.22);display:grid;place-items:center;margin-bottom:auto}
+.feat strong{font-size:17px;font-weight:800;margin-top:14px;line-height:1.2}
+.feat span.d{font-size:13px;opacity:.9;margin-top:4px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.stat{all:unset;box-sizing:border-box;background:var(--panel);border-radius:22px;padding:14px 16px;display:block}
+button.stat{cursor:pointer}
+.stat b{display:block;font-size:20px;font-weight:800}
+.stat span{font-size:12px;color:var(--muted)}
+/* study */
+.stage{background:var(--panel);border-radius:28px;padding:16px}
+.card{all:unset;box-sizing:border-box;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  min-height:clamp(300px,50dvh,430px);padding:24px;border-radius:32px;background:var(--purple);color:#fff;box-shadow:0 14px 26px rgba(79,63,217,.28)}
 button.card{cursor:pointer}
-.arabic{font-family:"Noto Naskh Arabic","Amiri","Traditional Arabic",serif;font-size:clamp(120px,30vw,170px);line-height:1.5;direction:rtl}
-.name{font-size:28px;font-weight:700;margin-top:4px}
-.latin{font-size:18px;color:var(--muted);margin-top:2px}
-.tap{color:var(--muted);font-size:14px;margin-top:10px}
-.reveal{display:none;text-align:center}
+.arabic{font-family:"Amiri","Traditional Arabic",serif;font-weight:700;font-size:clamp(120px,34vw,190px);line-height:1.5;direction:rtl}
+.name{font-size:clamp(28px,7vw,34px);font-weight:800;margin-top:2px}
+.latin{font-size:20px;opacity:.85;margin-top:4px;letter-spacing:.02em}
+.tap{display:flex;align-items:center;gap:8px;font-size:14px;opacity:.85;margin-top:8px}
+.tap svg{width:20px;height:20px}
+.reveal{display:none}
 .card.open .reveal{display:block}.card.open .tap{display:none}
-.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
-.btn{all:unset;box-sizing:border-box;cursor:pointer;padding:12px 20px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-weight:600;text-align:center}
-.btn:hover{border-color:var(--accent)}
-.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-.count{text-align:center;color:var(--muted);font-size:14px;margin-top:12px}
-.grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:28px}
-.chip{all:unset;box-sizing:border-box;cursor:pointer;width:44px;height:44px;display:grid;place-items:center;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-family:"Noto Naskh Arabic",serif;font-size:24px}
-.chip:hover{border-color:var(--accent)}
-.chip.on{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
-.setting{display:flex;align-items:center;gap:10px;margin-bottom:16px}
-.setting label{color:var(--muted);font-size:14px;white-space:nowrap}
-select{flex:1;min-width:0;padding:11px 12px;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px}
-:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.bar{display:flex;justify-content:center;align-items:center;gap:16px;margin-top:22px}
+.ib{all:unset;box-sizing:border-box;cursor:pointer;width:60px;height:60px;border-radius:20px;display:grid;place-items:center;background:var(--sheet);box-shadow:var(--shadow);color:var(--muted);transition:transform .12s}
+.ib:active{transform:scale(.94)}
+.ib svg{width:26px;height:26px}
+.ib.nx{color:var(--green)}
+.ib.hot{background:var(--orange);color:#fff;width:68px;height:68px;border-radius:22px;box-shadow:0 10px 20px rgba(255,122,69,.35)}
+.ib.hot svg{width:28px;height:28px}
+.wide{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;height:62px;padding:0 34px;border-radius:22px;background:var(--orange);color:#fff;font-weight:800;font-size:18px;box-shadow:0 10px 20px rgba(255,122,69,.35)}
+.wide:active{transform:scale(.97)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:8px;margin-top:22px}
+.chip{all:unset;box-sizing:border-box;cursor:pointer;height:48px;display:grid;place-items:center;border-radius:15px;background:var(--panel);color:var(--ink);font-family:"Amiri",serif;font-size:26px;font-weight:700;line-height:1}
+.chip.on{background:var(--purple);color:#fff}
+/* limit picker */
+.setting{background:var(--panel);border-radius:22px;padding:10px;margin-bottom:14px}
+.limit-btn{all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:flex;align-items:center;gap:12px;padding:2px 4px}
+.limit-btn .ic{width:40px;height:40px;border-radius:14px;background:var(--sheet);display:grid;place-items:center;color:var(--green);flex:none}
+.limit-btn .f{flex:1;min-width:0}
+.limit-btn small{display:block;font-size:12px;color:var(--muted)}
+.limit-btn strong{font-size:17px;font-weight:800}
+.limit-btn .arv{font-family:"Amiri",serif;font-size:24px;line-height:1;margin-left:6px;vertical-align:-2px}
+.limit-btn .chev{color:var(--muted);transition:transform .2s}
+.limit-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.picker{display:grid;grid-template-columns:repeat(auto-fill,minmax(50px,1fr));gap:7px;margin-top:12px}
+.picker[hidden]{display:none}
+.box{all:unset;box-sizing:border-box;cursor:pointer;height:60px;border-radius:14px;background:var(--sheet);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.box .no{font-size:11px;font-weight:700;color:var(--muted);line-height:1}
+.box .ar{font-family:"Amiri",serif;font-size:25px;font-weight:700;line-height:1.25}
+.box.in{background:var(--tint)}
+.box.in .no{color:var(--tintink)}
+.box.sel{background:var(--purple);color:#fff}
+.box.sel .no{color:rgba(255,255,255,.85)}
+/* bottom nav */
+.nav{position:sticky;bottom:10px;z-index:5;display:flex;gap:6px;margin-top:22px;padding:6px;border-radius:24px;background:var(--sheet);box-shadow:0 6px 22px rgba(34,45,70,.18);border:1px solid var(--line)}
+.nav button{all:unset;box-sizing:border-box;cursor:pointer;flex:1;height:50px;border-radius:18px;display:grid;place-items:center;color:var(--muted)}
+.nav button.on{background:var(--tint);color:var(--tintink)}
+:focus-visible{outline:3px solid var(--purple);outline-offset:3px}
+@media (min-width:700px){.wrap{align-items:center}.sheet{padding:28px 28px 18px}}
+@media (max-width:380px){.sheet{padding:16px 14px 12px;border-radius:28px}.ib{width:54px;height:54px}.ib.hot{width:62px;height:62px}.bar{gap:12px}.feat{min-height:160px;padding:15px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
-<main class="page">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="i-sound" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></symbol>
+  <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2zM22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"/></symbol>
+  <symbol id="i-cards" viewBox="0 0 24 24"><rect x="3" y="7" width="14" height="14" rx="3"/><path d="M7 3h11a3 3 0 0 1 3 3v11"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></symbol>
+</svg>
+<div class="blob g"></div><div class="blob o"></div>
+
+<div class="wrap"><main class="sheet">
 
 <section class="view" id="v-home">
-  <h1>Kartu Hijaiyah</h1>
-  <p class="lead">Pilih cara belajar.</p>
-  <div class="menu">
-    <button type="button" data-go="pengenalan"><strong>Pengenalan</strong><span>Kenali huruf hijaiyah beserta nama dan transliterasinya.</span></button>
-    <button type="button" data-go="flashcard"><strong>Flashcard hafalan</strong><span>Uji hafalan huruf secara acak, dengan batas huruf yang bisa diatur.</span></button>
+  <div class="head">
+    <span class="logo" aria-hidden="true">ح</span>
+    <div class="t"><span class="hello">Assalamu’alaikum</span><h1>Hilya</h1></div>
+    <button class="round theme" type="button" aria-label="Ganti tema terang atau gelap"><svg class="i moon"><use href="#i-moon"/></svg><svg class="i sun"><use href="#i-sun"/></svg></button>
+  </div>
+  <button class="hero" id="hero" type="button">
+    <span>
+      <small>Huruf hari ini</small>
+      <strong id="hName"></strong>
+      <span class="lt" id="hLatin"></span>
+      <span class="cta">Kenali <svg class="i"><use href="#i-right"/></svg></span>
+    </span>
+    <span class="harab" id="hArab" lang="ar"></span>
+  </button>
+  <h3>Mulai belajar</h3>
+  <div class="feats">
+    <button class="feat g" type="button" data-go="pengenalan">
+      <span class="ic"><svg class="i"><use href="#i-book"/></svg></span>
+      <strong>Pengenalan</strong><span class="d">Nama dan transliterasi huruf</span>
+    </button>
+    <button class="feat o" type="button" data-go="flashcard">
+      <span class="ic"><svg class="i"><use href="#i-cards"/></svg></span>
+      <strong>Flashcard hafalan</strong><span class="d">Uji hafalan secara acak</span>
+    </button>
+  </div>
+  <div class="stats">
+    <div class="stat"><b>29</b><span>Huruf hijaiyah</span></div>
+    <button class="stat" type="button" data-go="flashcard"><b id="hLimit"></b><span>Batas hafalan</span></button>
   </div>
 </section>
 
 <section class="view" id="v-pengenalan">
-  <div class="top"><button class="back" type="button" data-go="home">← Beranda</button><span class="title">Pengenalan</span><span style="width:70px"></span></div>
-  <div class="card" aria-live="polite">
-    <span class="arabic" id="pArabic" lang="ar"></span>
-    <span class="name" id="pName"></span>
-    <span class="latin" id="pLatin"></span>
+  <div class="head">
+    <button class="round" type="button" data-go="home" aria-label="Kembali ke beranda"><svg class="i"><use href="#i-left"/></svg></button>
+    <div class="t"><h2>Pengenalan</h2><p>Huruf hijaiyah</p></div>
+    <span class="pill" id="pCount"></span>
+    <button class="round theme" type="button" aria-label="Ganti tema terang atau gelap"><svg class="i moon"><use href="#i-moon"/></svg><svg class="i sun"><use href="#i-sun"/></svg></button>
   </div>
-  <div class="row">
-    <button class="btn" id="pPrev" type="button">Sebelumnya</button>
-    <button class="btn" id="pSound" type="button">Dengarkan</button>
-    <button class="btn primary" id="pNext" type="button">Berikutnya</button>
+  <div class="stage">
+    <div class="card" aria-live="polite">
+      <span class="arabic" id="pArabic" lang="ar"></span>
+      <span class="name" id="pName"></span>
+      <span class="latin" id="pLatin"></span>
+    </div>
   </div>
-  <p class="count" id="pCount"></p>
+  <div class="bar">
+    <button class="ib" id="pPrev" type="button" aria-label="Huruf sebelumnya"><svg class="i"><use href="#i-left"/></svg></button>
+    <button class="ib hot" id="pSound" type="button" aria-label="Dengarkan"><svg class="i"><use href="#i-sound"/></svg></button>
+    <button class="ib nx" id="pNext" type="button" aria-label="Huruf berikutnya"><svg class="i"><use href="#i-right"/></svg></button>
+  </div>
   <div class="grid" id="pGrid"></div>
 </section>
 
 <section class="view" id="v-flashcard">
-  <div class="top"><button class="back" type="button" data-go="home">← Beranda</button><span class="title">Flashcard hafalan</span><span style="width:70px"></span></div>
-  <div class="setting">
-    <label for="limit">Hafalan sampai huruf</label>
-    <select id="limit"></select>
+  <div class="head">
+    <button class="round" type="button" data-go="home" aria-label="Kembali ke beranda"><svg class="i"><use href="#i-left"/></svg></button>
+    <div class="t"><h2>Flashcard hafalan</h2></div>
+    <button class="round theme" type="button" aria-label="Ganti tema terang atau gelap"><svg class="i moon"><use href="#i-moon"/></svg><svg class="i sun"><use href="#i-sun"/></svg></button>
   </div>
-  <button class="card" id="fCard" type="button" aria-label="Ketuk kartu untuk melihat jawaban">
-    <span class="arabic" id="fArabic" lang="ar"></span>
-    <span class="tap">Ketuk kartu untuk melihat jawaban</span>
-    <span class="reveal"><span class="name" id="fName" style="display:block"></span><span class="latin" id="fLatin" style="display:block"></span></span>
-  </button>
-  <div class="row"><button class="btn primary" id="fShuffle" type="button">Acak</button></div>
+  <div class="setting">
+    <button class="limit-btn" id="limitBtn" type="button" aria-expanded="false" aria-controls="picker">
+      <span class="ic"><svg class="i"><use href="#i-sliders"/></svg></span>
+      <span class="f"><small>Hafalan sampai huruf</small><strong>ke-<span id="limitNo"></span><span class="arv" id="limitAr" lang="ar"></span></strong></span>
+      <svg class="i chev"><use href="#i-down"/></svg>
+    </button>
+    <div class="picker" id="picker" hidden></div>
+  </div>
+  <div class="stage">
+    <button class="card" id="fCard" type="button" aria-label="Ketuk kartu untuk melihat jawaban">
+      <span class="arabic" id="fArabic" lang="ar"></span>
+      <span class="reveal"><span class="name" id="fName" style="display:block"></span><span class="latin" id="fLatin" style="display:block"></span></span>
+    </button>
+  </div>
+  <div class="bar"><button class="wide" id="fShuffle" type="button"><svg class="i"><use href="#i-shuffle"/></svg>Acak</button></div>
 </section>
 
-</main>
+<nav class="nav" aria-label="Menu utama">
+  <button type="button" data-go="home" aria-label="Beranda"><svg class="i"><use href="#i-home"/></svg></button>
+  <button type="button" data-go="pengenalan" aria-label="Pengenalan"><svg class="i"><use href="#i-book"/></svg></button>
+  <button type="button" data-go="flashcard" aria-label="Flashcard hafalan"><svg class="i"><use href="#i-cards"/></svg></button>
+</nav>
+
+</main></div>
 
 <script>
 const letters = [
@@ -109,14 +227,30 @@ const letters = [
   {c:"ي",n:"Ya",l:"Ya"}
 ];
 const $ = id => document.getElementById(id);
+const root = document.documentElement;
 const views = ["home","pengenalan","flashcard"];
 
+/* Tema */
+const dq = matchMedia("(prefers-color-scheme: dark)");
+const eff = () => root.dataset.theme || (dq.matches ? "dark" : "light");
+const applyTheme = () => { root.dataset.eff = eff(); };
+try { const s = localStorage.getItem("hijaiyah-theme"); if(s==="dark"||s==="light") root.dataset.theme = s; } catch(e){}
+applyTheme();
+dq.addEventListener("change", applyTheme);
+document.querySelectorAll(".theme").forEach(b => b.addEventListener("click", () => {
+  const next = eff()==="dark" ? "light" : "dark";
+  root.dataset.theme = next; applyTheme();
+  try { localStorage.setItem("hijaiyah-theme", next); } catch(e){}
+}));
+
+/* Navigasi */
 function show(name){
   if(!views.includes(name)) name = "home";
   views.forEach(v => $("v-"+v).classList.toggle("on", v===name));
+  document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("on", b.dataset.go===name));
   window.scrollTo(0,0);
 }
-function go(name){ location.hash = name === "home" ? "" : name; }
+function go(name){ location.hash = name==="home" ? "" : name; show(name); }
 window.addEventListener("hashchange", () => show(location.hash.slice(1)));
 document.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => go(b.dataset.go)));
 
@@ -125,7 +259,7 @@ let p = 0;
 function renderP(){
   const t = letters[p];
   $("pArabic").textContent = t.c; $("pName").textContent = t.n; $("pLatin").textContent = t.l;
-  $("pCount").textContent = `Huruf ${p+1} dari ${letters.length}`;
+  $("pCount").textContent = `${p+1} / ${letters.length}`;
   document.querySelectorAll("#pGrid .chip").forEach((el,i) => el.classList.toggle("on", i===p));
 }
 function setP(i){ p = (i + letters.length) % letters.length; renderP(); }
@@ -149,12 +283,35 @@ $("pSound").addEventListener("click", () => {
 /* Flashcard */
 let f = 0, limit = letters.length;
 try { const s = parseInt(localStorage.getItem("hijaiyah-limit"),10); if(s>=1 && s<=letters.length) limit = s; } catch(e){}
+
 letters.forEach((t,i) => {
-  const o = document.createElement("option");
-  o.value = i+1; o.textContent = `${i+1}. ${t.n} (${t.c})`;
-  $("limit").appendChild(o);
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "box";
+  b.setAttribute("aria-label", `Sampai huruf ke-${i+1}, ${t.n}`);
+  b.innerHTML = `<span class="no">${i+1}</span><span class="ar" lang="ar">${t.c}</span>`;
+  b.addEventListener("click", () => setLimit(i+1));
+  $("picker").appendChild(b);
 });
-$("limit").value = limit;
+function renderLimit(){
+  $("limitNo").textContent = limit;
+  $("limitAr").textContent = letters[limit-1].c;
+  $("hLimit").textContent = "Sampai " + letters[limit-1].n;
+  document.querySelectorAll("#picker .box").forEach((el,i) => {
+    el.classList.toggle("in", i < limit);
+    el.classList.toggle("sel", i === limit-1);
+  });
+}
+function setLimit(n){
+  limit = n; renderLimit();
+  try { localStorage.setItem("hijaiyah-limit", String(limit)); } catch(e){}
+  togglePicker(false);
+  f = -1; shuffleF();
+}
+function togglePicker(open){
+  $("picker").hidden = !open;
+  $("limitBtn").setAttribute("aria-expanded", String(open));
+}
+$("limitBtn").addEventListener("click", () => togglePicker($("picker").hidden));
 
 function renderF(){
   const t = letters[f];
@@ -162,20 +319,22 @@ function renderF(){
   $("fCard").classList.remove("open");
 }
 function shuffleF(){
-  let n = f;
-  if(limit > 1) while(n === f) n = Math.floor(Math.random()*limit);
-  else n = 0;
+  let n = 0;
+  if(limit > 1) do { n = Math.floor(Math.random()*limit); } while(n === f);
   f = n; renderF();
 }
 $("fCard").addEventListener("click", () => $("fCard").classList.toggle("open"));
 $("fShuffle").addEventListener("click", shuffleF);
-$("limit").addEventListener("change", e => {
-  limit = parseInt(e.target.value,10);
-  try { localStorage.setItem("hijaiyah-limit", String(limit)); } catch(err){}
-  f = -1; shuffleF();
-});
 
-renderP();
+/* Beranda: huruf hari ini */
+const d = new Date();
+const day = (d.getFullYear()*372 + d.getMonth()*31 + d.getDate()) % letters.length;
+$("hName").textContent = letters[day].n;
+$("hLatin").textContent = letters[day].l;
+$("hArab").textContent = letters[day].c;
+$("hero").addEventListener("click", () => { setP(day); go("pengenalan"); });
+
+renderLimit(); renderP();
 f = Math.floor(Math.random()*limit); renderF();
 show(location.hash.slice(1));
 </script>
